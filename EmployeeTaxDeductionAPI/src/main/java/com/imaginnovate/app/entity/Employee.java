@@ -9,8 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
+
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Before;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,31 +29,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(staticName = "build")
 
 @Entity
+
 public class Employee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long emp_ID;
 
-	@NotNull(message = "First name should not be null.")
+	@NotBlank(message = "First name should not be null or empty.")
 	private String first_name;
 	
-	@NotNull(message = "Last name should not be null.")
+	@NotBlank(message = "Last name should not be null or empty.")
 	private String last_name;
 	
-	@NotNull(message = "Email should not be null.")
+	@NotBlank(message = "Email should not be null or empty")
 	@Email(message = "Email should be valid.")
 	private String email;
 	
+	@PastOrPresent(message = "The date should not be the future.")
 	@NotNull(message = "Date of join should not be null.")
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
 	private Date dateOfJoin;
 	
-	@NotNull(message ="salary should not be null.")
+	@NotNull(message ="salary shoul	d not be null.")
 	private Double salary;
 	
-	@NotNull(message = "Phone number should not be null.")
+	@NotNull(message = "Phone number should not be null")
 	@ElementCollection
-	private List<Integer> phoneNums;
+	private List<Long> phoneNums;
 
 }
