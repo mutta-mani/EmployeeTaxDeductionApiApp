@@ -8,11 +8,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import javax.validation.constraints.Pattern;
 
 import org.aspectj.lang.annotation.After;
@@ -29,33 +36,32 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(staticName = "build")
 
 @Entity
-
 public class Employee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long emp_ID;
+	private int employeeId;
 
 	@NotBlank(message = "First name should not be null or empty.")
-	private String first_name;
+	private String firstName;
 	
 	@NotBlank(message = "Last name should not be null or empty.")
-	private String last_name;
+	private String lastName;
 	
-	@NotBlank(message = "Email should not be null or empty")
+	@NotBlank(message = "Email should not benull or empty")
 	@Email(message = "Email should be valid.")
 	private String email;
 	
-	@PastOrPresent(message = "The date should not be the future.")
-	@NotNull(message = "Date of join should not be null.")
-    @JsonFormat(pattern = "dd-MM-yyyy")
-	private Date dateOfJoin;
+	@NotBlank(message = "Doj should not be null or empty.")
+    @JsonFormat(pattern = "yyyy-mm-dd")
+	private String doj;	
 	
-	@NotNull(message ="salary shoul	d not be null.")
+	@NotNull(message = "Salary should not be null or empty.")
+	@Positive(message = "Salary should be positive value")
 	private Double salary;
 	
-	@NotNull(message = "Phone number should not be null")
-	@ElementCollection
-	private List<Long> phoneNums;
+@NotBlank(message = "Phone no should not be null or empty")
+@Pattern(regexp = "^[6-9]\\d{9}$", message= "phoneNumber count should be 10 digits and starts with 6,7,8,9 digit")
+private String phoneNumbers;
 
 }

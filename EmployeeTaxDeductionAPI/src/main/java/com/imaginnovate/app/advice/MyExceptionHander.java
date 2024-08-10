@@ -2,6 +2,7 @@ package com.imaginnovate.app.advice;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,23 +12,29 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.imaginnovate.app.exception.EmployeeNotFoundException;
+
 @ControllerAdvice
 public class MyExceptionHander {
 
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Object> handleInvalidArgument(MethodArgumentNotValidException ex) {
+		Map<String, String> errorMap = new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errorMap.put(fieldName, errorMessage);
+		});
+		return new ResponseEntity<Object>(errorMap, HttpStatus.BAD_REQUEST);
+	}
 
-	  @ResponseStatus(HttpStatus.BAD_REQUEST)
-	    @ExceptionHandler(MethodArgumentNotValidException.class)
-	    public ResponseEntity<Object> handleInvalidArgument(MethodArgumentNotValidException ex) {
-	        Map<String, String> errorMap = new HashMap<>();
-	        ex.getBindingResult().getAllErrors().forEach((error) -> {
-	            String fieldName = ((FieldError) error).getField();
-	            String errorMessage = error.getDefaultMessage();
-	            errorMap.put(fieldName, errorMessage);
-	        });
-	        return new ResponseEntity<Object>(errorMap, HttpStatus.BAD_REQUEST);
-	    }
-	  
-	  
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(EmployeeNotFoundException.class)
+	public Map<String, String> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
+		Map<String, String> errorMap = new HashMap<>();
+		errorMap.put("errorMessage", ex.getMessage());
+		return errorMap;
+	}
 
-	   
 }
