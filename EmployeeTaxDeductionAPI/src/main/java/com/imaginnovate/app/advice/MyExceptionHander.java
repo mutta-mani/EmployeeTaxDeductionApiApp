@@ -29,12 +29,12 @@ public class MyExceptionHander {
 		return new ResponseEntity<Object>(errorMap, HttpStatus.BAD_REQUEST);
 	}
 
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(EmployeeNotFoundException.class)
 	public Map<String, String> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
 		Map<String, String> errorMap = new HashMap<>();
 		errorMap.put("errorMessage", ex.getMessage());
-		return errorMap;
+		return new ResponseEntity<Object>(errorMap, HttpStatus.NOT_FOUND);
 	}
 
 }
