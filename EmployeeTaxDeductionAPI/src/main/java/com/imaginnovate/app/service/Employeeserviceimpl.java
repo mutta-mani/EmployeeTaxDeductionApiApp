@@ -48,7 +48,7 @@ public class Employeeserviceimpl implements EmployeeService {
 			return empwithtaxdetails;
 		}
 		else {
-			throw new EmployeeNotFoundException("Employee not there for given Id" +empId);
+			throw new EmployeeNotFoundException("Employee not there for given Id " +empId);
 		}
 		
 	}
