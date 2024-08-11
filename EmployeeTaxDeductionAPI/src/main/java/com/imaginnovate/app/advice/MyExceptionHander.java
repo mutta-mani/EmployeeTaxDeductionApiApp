@@ -31,7 +31,7 @@ public class MyExceptionHander {
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(EmployeeNotFoundException.class)
-	public Map<String, String> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
+	public ResponseEntity<Object> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
 		Map<String, String> errorMap = new HashMap<>();
 		errorMap.put("errorMessage", ex.getMessage());
 		return new ResponseEntity<Object>(errorMap, HttpStatus.NOT_FOUND);
